@@ -1,7 +1,7 @@
 package AbstractFactoryPattern.Factories;
 
 import AbstractFactoryPattern.Components.Cpu;
-import AbstractFactoryPattern.Components.GpuPackage.Gpu;
+import AbstractFactoryPattern.Components.Gpu;
 
 public interface Company {
     Gpu createGpu(String model);

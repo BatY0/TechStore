@@ -1,4 +1,10 @@
 package AbstractFactoryPattern.Components;
 
-public interface Motherboard {
+import CompositePattern.Hardware;
+
+public interface Motherboard extends Hardware {
+    String getModel();
+    SocketType getSocketType();
+    int getRamSlotCount();
+
 }

@@ -1,8 +1,8 @@
 package AbstractFactoryPattern.Factories;
 
 import AbstractFactoryPattern.Components.Cpu;
-import AbstractFactoryPattern.Components.GpuPackage.Gpu;
-import AbstractFactoryPattern.Components.GpuPackage.MSIGpu;
+import AbstractFactoryPattern.Components.Gpu;
+import AbstractFactoryPattern.MsiProducts.MSIGpu;
 
 public class MSIManufacturer implements Company {
     @Override

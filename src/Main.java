@@ -1,5 +1,5 @@
 import AbstractFactoryPattern.Factories.ASUSManufacturer;
-import AbstractFactoryPattern.Components.GpuPackage.Gpu;
+import AbstractFactoryPattern.Components.Gpu;
 import AbstractFactoryPattern.Factories.MSIManufacturer;
 import CompositePattern.HardwareStock;
 

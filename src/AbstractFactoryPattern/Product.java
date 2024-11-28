@@ -1,5 +1,6 @@
 package AbstractFactoryPattern;
 
+import AbstractFactoryPattern.AsusProducts.ASUSGpu;
 import CompositePattern.Hardware;
 
 public abstract class Product implements Hardware {
@@ -9,6 +10,9 @@ public abstract class Product implements Hardware {
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
+    }
+    public String getName(){
+        return name;
     }
 
     @Override
@@ -34,6 +38,19 @@ public abstract class Product implements Hardware {
     @Override
     public Hardware getChild(int index) {
         throw new UnsupportedOperationException("Leaf product does not have children.");//This for the composite products
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Product product = (Product) obj;
+        return getName().equals(product.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
     }
 }
 

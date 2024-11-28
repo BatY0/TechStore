@@ -1,8 +1,8 @@
 package AbstractFactoryPattern.Factories;
 
-import AbstractFactoryPattern.Components.GpuPackage.ASUSGpu;
+import AbstractFactoryPattern.AsusProducts.ASUSGpu;
 import AbstractFactoryPattern.Components.Cpu;
-import AbstractFactoryPattern.Components.GpuPackage.Gpu;
+import AbstractFactoryPattern.Components.Gpu;
 
 public class ASUSManufacturer implements Company {
     @Override
