@@ -15,7 +15,7 @@ public interface Company {
     Memory createMemory(String model, int capacity, int speed, MemoryType type, double price);
 
     // Method to create a Case
-    Case createCase(String model, Case.CaseType caseType, int fanCount, double price);
+    Case createCase(String model, FormFactor formFactor, int fanCount, double price);
 
     // Method to create a CPU Cooler
     CpuCooler createCpuCooler(String model, CpuCooler.CoolingType coolingType, int fanSpeed, double noiseLevel, double coolingCapacity, String size, double price);

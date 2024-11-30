@@ -23,7 +23,7 @@ public class MSIManufacturer implements Company {
     }
 
     @Override
-    public Case createCase(String model, Case.CaseType caseType, int fanCount, double price) {
+    public Case createCase(String model, FormFactor formFactor, int fanCount, double price) {
         throw new UnsupportedOperationException("MSI does not manufacture Case");
     }
 

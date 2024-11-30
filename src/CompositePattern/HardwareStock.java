@@ -1,10 +1,16 @@
 package CompositePattern;
 
+import ObserverPattern.Observer;
+import ObserverPattern.Subject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class HardwareStock implements Hardware {
+public class HardwareStock implements Hardware, Subject {
     private Map<Hardware, Integer> hardwares = new HashMap<>();
+    private List<Observer> observers = new ArrayList<>();
 
     @Override
     public String getDescription() {
@@ -39,6 +45,7 @@ public class HardwareStock implements Hardware {
             return;
         }
         hardwares.put(hardware, hardwares.getOrDefault(hardware, 0) + count);
+        notifyObservers("Added " + count + " of " + hardware.getDescription());
     }
 
     @Override
@@ -56,13 +63,36 @@ public class HardwareStock implements Hardware {
         int currentCount = hardwares.get(hardware);
         if (currentCount <= count) {
             hardwares.remove(hardware);
+            notifyObservers("Removed all of " + hardware.getDescription());
         } else {
             hardwares.put(hardware, currentCount - count);
+            notifyObservers("Removed " + count + " of " + hardware.getDescription());
         }
     }
 
     @Override
     public Hardware getChild(int index) {
         throw new UnsupportedOperationException("Not applicable for this implementation.");
+    }
+
+    @Override
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        notifyObservers("");
+    }
+
+    private void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
     }
 }

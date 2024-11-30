@@ -21,8 +21,8 @@ public class ASUSManufacturer implements Company {
     }
 
     @Override
-    public Case createCase(String model, Case.CaseType caseType, int fanCount, double price) {
-        return new AsusCase(model, price, caseType, fanCount);
+    public Case createCase(String model, FormFactor formFactor, int fanCount, double price) {
+        return new AsusCase(model, price, formFactor , fanCount);
     }
 
     @Override
