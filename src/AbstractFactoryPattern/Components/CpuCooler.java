@@ -1,15 +1,50 @@
 package AbstractFactoryPattern.Components;
 
-import CompositePattern.Hardware;
+import AbstractFactoryPattern.Product;
 
-public interface CpuCooler extends Hardware {
-    enum CoolingType{
+public abstract class CpuCooler extends Product {
+
+    public enum CoolingType {
         Liquid,
         Air
     }
-    String getModel();
-    CoolingType getCoolingType();
-    int getFanSpeed();
-    double getNoiseLevel();
-    String getSize();
+
+    private CoolingType coolingType;
+    private int fanSpeed;
+    private double noiseLevel;
+    private String size;
+
+    // Constructor to initialize common CpuCooler properties
+    public CpuCooler(String model, double price, CoolingType coolingType, int fanSpeed, double noiseLevel, String size) {
+        super(model, price);
+        this.coolingType = coolingType;
+        this.fanSpeed = fanSpeed;
+        this.noiseLevel = noiseLevel;
+        this.size = size;
+    }
+
+    // Getter methods for common CpuCooler properties
+    public CoolingType getCoolingType() {
+        return coolingType;
+    }
+
+    public int getFanSpeed() {
+        return fanSpeed;
+    }
+
+    public double getNoiseLevel() {
+        return noiseLevel;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+
+    // Default description for CpuCooler
+    @Override
+    public String getDescription() {
+        return String.format("%s (Cooling Type: %s, Fan Speed: %d RPM, Noise Level: %.2f dB, Size: %s, Price: $%.2f)",
+                getName(), coolingType, fanSpeed, noiseLevel, size, getPrice());
+    }
 }

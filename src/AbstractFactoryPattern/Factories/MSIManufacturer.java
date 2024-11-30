@@ -1,24 +1,34 @@
 package AbstractFactoryPattern.Factories;
 
-import AbstractFactoryPattern.Components.Cpu;
-import AbstractFactoryPattern.Components.Gpu;
+import AbstractFactoryPattern.Components.*;
 import AbstractFactoryPattern.MsiProducts.MSIGpu;
+import AbstractFactoryPattern.MsiProducts.MsiCpuCooler;
 
 public class MSIManufacturer implements Company {
+
+
     @Override
-    public Gpu createGpu(String model) {
-        switch (model) {
-            case "RTX3060": return new MSIGpu("RTX3060",264.99,8,1320);
-            case "RTX4060": return new MSIGpu("RTX4060",289,12,1830);
-            default: throw new IllegalArgumentException("MSI does not produce this GPU model: " + model);
-        }
+    public Gpu createGpu(String model, int memorySize, double clockSpeed, double price) {
+        return new MSIGpu(model,price,memorySize,clockSpeed);
     }
 
     @Override
-    public Cpu createCpu(String model) {
-        System.out.println("MSI does not manufacture CPUs.");
-        return null;
+    public Cpu createCpu(String model, String socket, int cores, int threads, double clockSpeed, double price) {
+        throw new UnsupportedOperationException("MSI does not manufacture CPU");
     }
 
+    @Override
+    public Memory createMemory(String model, int capacity, int speed, MemoryType type, double price) {
+        throw new UnsupportedOperationException("MSI does not manufacture Memory");
+    }
 
+    @Override
+    public Case createCase(String model, Case.CaseType caseType, int fanCount, double price) {
+        throw new UnsupportedOperationException("MSI does not manufacture Case");
+    }
+
+    @Override
+    public CpuCooler createCpuCooler(String model, CpuCooler.CoolingType coolingType, int fanSpeed, double noiseLevel, double coolingCapacity, String size, double price) {
+        return new MsiCpuCooler(model, price, coolingType, fanSpeed, noiseLevel, coolingCapacity, size);
+    }
 }

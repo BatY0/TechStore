@@ -1,23 +1,33 @@
 package AbstractFactoryPattern.Factories;
 
 import AbstractFactoryPattern.AsusProducts.ASUSGpu;
-import AbstractFactoryPattern.Components.Cpu;
-import AbstractFactoryPattern.Components.Gpu;
+import AbstractFactoryPattern.AsusProducts.AsusCase;
+import AbstractFactoryPattern.Components.*;
 
 public class ASUSManufacturer implements Company {
     @Override
-    public Gpu createGpu(String model) {
-        switch (model) {
-            case "RTX3060": return new ASUSGpu("RTX3060",279.97,12,1320);
-            case "RTX4060": return new ASUSGpu("RTX4060",298.67,8,1830);
-            default: throw new IllegalArgumentException("ASUS does not produce this GPU model: " + model);
-        }
+    public Gpu createGpu(String model, int memorySize, double clockSpeed, double price) {
+        return new ASUSGpu(model, price, memorySize, clockSpeed);
     }
 
     @Override
-    public Cpu createCpu(String model) {
-        System.out.println("ASUS does not manufacture CPUs.");
-        return null;
+    public Cpu createCpu(String model, String socket, int cores, int threads, double clockSpeed, double price) {
+        throw new UnsupportedOperationException("ASUS does not manufacture CPUs.");
+    }
+
+    @Override
+    public Memory createMemory(String model, int capacity, int speed, MemoryType type, double price) {
+        throw new UnsupportedOperationException("ASUS does not manufacture memory.");
+    }
+
+    @Override
+    public Case createCase(String model, Case.CaseType caseType, int fanCount, double price) {
+        return new AsusCase(model, price, caseType, fanCount);
+    }
+
+    @Override
+    public CpuCooler createCpuCooler(String model, CpuCooler.CoolingType coolingType, int fanSpeed, double noiseLevel, double coolingCapacity, String size, double price) {
+       throw new UnsupportedOperationException("ASUS does not manufacture cpu cooler.");
     }
 
 
