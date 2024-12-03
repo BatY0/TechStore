@@ -18,7 +18,7 @@ public class HardwareStock implements Hardware, Subject {
 
     @Override
     public String getDescription() {
-        StringBuilder description = new StringBuilder("Hardware Stock:\n");
+        StringBuilder description = new StringBuilder(name +" Hardware Stock:\n");
         for (Map.Entry<Hardware, Integer> entry : hardwares.entrySet()) {
             Hardware hardware = entry.getKey();
             int quantity = entry.getValue();
