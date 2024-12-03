@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 public class HardwareStock implements Hardware, Subject {
+    private final String name;
     private Map<Hardware, Integer> hardwares = new HashMap<>();
     private List<Observer> observers = new ArrayList<>();
+    public HardwareStock(String name) {
+        this.name = name;
+    }
 
     @Override
     public String getDescription() {

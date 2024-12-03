@@ -1,6 +1,5 @@
 package AbstractFactoryPattern;
 
-import AbstractFactoryPattern.AsusProducts.ASUSGpu;
 import CompositePattern.Hardware;
 
 public abstract class Product implements Hardware {
