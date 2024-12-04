@@ -21,11 +21,10 @@ public abstract class Storage extends Product {
         return storageType;
     }
 
-    public abstract String getModel();
 
     @Override
     public String getDescription() {
         return String.format("%s (Capacity: %dGB, Storage Type: %s, Price: $%.2f)",
-                getModel(), capacity, storageType, getPrice());
+                getName(), capacity, storageType, getPrice());
     }
 }

@@ -27,8 +27,6 @@ public abstract class Memory extends Product {
         return type;
     }
 
-    // Abstract method to enforce model retrieval in subclasses
-    public abstract String getModel();
 
     @Override
     public String getDescription() {

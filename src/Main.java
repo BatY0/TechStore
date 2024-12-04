@@ -15,9 +15,10 @@ public class Main {
         Company asusFactory = new ASUSManufacturer();
         inventoryManager.addFactory("ASUS", asusFactory);
 
+
         // Create some products using the factory
-        Hardware asusGpu = asusFactory.createGpu("RTX 3080", 10, 1.7, 699.99);
-        Hardware asusCase = asusFactory.createCase("Rog Strix", FormFactor.ATX, 3, 199.99);
+        Hardware asusGpu = inventoryManager.getFactory("ASUS").createGpu("RTX 3080", 10, 1.7, 699.99);
+        Hardware asusCase = inventoryManager.getFactory("ASUS").createCase("Rog Strix", FormFactor.ATX, 3, 199.99);
 
         // Create some tech stores
         TechStores store1 = new TechStores("Store 1");

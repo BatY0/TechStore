@@ -8,8 +8,8 @@ public class MSIGpu extends Gpu {
     }
 
     @Override
-    public String getModel() {
-        return getName();
+    public String getBrand() {
+        return "MSI";
     }
 
 }

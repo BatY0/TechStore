@@ -10,7 +10,7 @@ public class AsusCase extends Case {
     }
 
     @Override
-    public String getModel() {
-        return getName();
+    public String getBrand() {
+        return "Asus";
     }
 }

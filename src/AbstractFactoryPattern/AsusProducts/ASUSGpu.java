@@ -10,8 +10,8 @@ public class ASUSGpu extends Gpu {
     }
 
     @Override
-    public String getModel() {
-        return getName();
+    public String getBrand() {
+        return "Asus";
     }
 
 

@@ -38,6 +38,7 @@ public abstract class Product implements Hardware {
     public Hardware getChild(int index) {
         throw new UnsupportedOperationException("Leaf product does not have children.");//This for the composite products
     }
+    public abstract String getBrand();
 
     @Override
     public boolean equals(Object obj) {

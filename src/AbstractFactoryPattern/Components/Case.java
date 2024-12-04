@@ -10,8 +10,8 @@ public abstract class Case extends Product {
     private int fanCount;
 
     // Constructor to initialize the common properties of a case
-    public Case(String model, double price, FormFactor caseType, int fanCount) {
-        super(model, price);
+    public Case(String name, double price, FormFactor caseType, int fanCount) {
+        super(name, price);
         this.formFactor = caseType;
         this.fanCount = fanCount;
     }
@@ -26,8 +26,7 @@ public abstract class Case extends Product {
         return fanCount;
     }
 
-    // Abstract method to enforce model retrieval in subclasses
-    public abstract String getModel();
+
 
     // Default description for a case
     @Override

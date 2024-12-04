@@ -10,8 +10,8 @@ public class CorsairMemory extends Memory {
     }
 
     @Override
-    public String getModel() {
-        return getName();
+    public String getBrand() {
+        return "Corsair";
     }
 
 }

@@ -8,7 +8,7 @@ public class IntelCpu extends Cpu {
     }
 
     @Override
-    public String getModel() {
-        return super.getDescription().split(" CPU")[0];
+    public String getBrand() {
+        return "Intel";
     }
 }

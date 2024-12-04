@@ -8,8 +8,8 @@ public abstract class Gpu extends Product {
     private double clockSpeed;
 
     // Constructor to initialize the GPU's memory size and clock speed
-    public Gpu(String description, double price, int memorySize, double clockSpeed) {
-        super(description, price);
+    public Gpu(String name, double price, int memorySize, double clockSpeed) {
+        super(name, price);
         this.memorySize = memorySize;
         this.clockSpeed = clockSpeed;
     }
@@ -23,12 +23,10 @@ public abstract class Gpu extends Product {
         return clockSpeed;
     }
 
-    // Abstract method to get the model name (to be implemented by subclasses)
-    public abstract String getModel();
 
     @Override
     public String getDescription() {
         return String.format("%s GPU, %d GB VRAM, %.2f GHz Clock Speed, Price: $%.2f",
-                getModel(), memorySize, clockSpeed, getPrice());
+                getName(), memorySize, clockSpeed, getPrice());
     }
 }

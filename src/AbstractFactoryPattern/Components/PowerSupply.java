@@ -21,11 +21,11 @@ public abstract class PowerSupply extends Product {
         return modular;
     }
 
-    public abstract String getModel();
+
 
     @Override
     public String getDescription() {
         return String.format("%s (Wattage: %dW, Modular: %b, Price: $%.2f)",
-                getModel(), wattage, modular, getPrice());
+                getName(), wattage, modular, getPrice());
     }
 }

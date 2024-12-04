@@ -10,8 +10,8 @@ public abstract class Cpu extends Product {
     private double clockSpeed;
 
     // Constructor to initialize common CPU properties
-    public Cpu(String description, double price, SocketType socket, int coreCount, int threadCount, double clockSpeed) {
-        super(description, price);
+    public Cpu(String name, double price, SocketType socket, int coreCount, int threadCount, double clockSpeed) {
+        super(name, price);
         this.socket = socket;
         this.coreCount = coreCount;
         this.threadCount = threadCount;
@@ -35,13 +35,11 @@ public abstract class Cpu extends Product {
         return clockSpeed;
     }
 
-    // Abstract method to get the model (to be implemented by subclasses)
-    public abstract String getModel();
 
     // Concrete method to return the full description of the CPU
     @Override
     public String getDescription() {
-        return String.format("%s CPU, %d cores, %d threads, %.2f GHz, Socket: %s", getModel(), coreCount, threadCount, clockSpeed, socket);
+        return String.format("%s CPU, %d cores, %d threads, %.2f GHz, Socket: %s", getName(), coreCount, threadCount, clockSpeed, socket);
     }
 
 }

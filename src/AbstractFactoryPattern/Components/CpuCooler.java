@@ -15,8 +15,8 @@ public abstract class CpuCooler extends Product {
     private String size;
 
     // Constructor to initialize common CpuCooler properties
-    public CpuCooler(String model, double price, CoolingType coolingType, int fanSpeed, double noiseLevel, String size) {
-        super(model, price);
+    public CpuCooler(String name, double price, CoolingType coolingType, int fanSpeed, double noiseLevel, String size) {
+        super(name, price);
         this.coolingType = coolingType;
         this.fanSpeed = fanSpeed;
         this.noiseLevel = noiseLevel;
