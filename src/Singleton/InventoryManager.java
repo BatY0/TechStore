@@ -1,11 +1,12 @@
 package Singleton;
 
-import AbstractFactoryPattern.Factories.Company;
-import CompositePattern.Hardware;
-import CompositePattern.HardwareStock;
-import ObserverPattern.Observer;
+import AbstractFactory.Factories.Company;
+import CompositeAndIterator.Hardware;
+import CompositeAndIterator.HardwareStock;
+import Observer.Observer;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class InventoryManager {
@@ -92,5 +93,31 @@ public class InventoryManager {
         } else {
             return 0.0;
         }
+    }
+    public String getHardwareByBrand(String brand) {
+        StringBuilder result = new StringBuilder();
+        for (HardwareStock stock : hardwareStocks.values()) {
+            Iterator<Hardware> iterator = stock.createIterator();
+            while (iterator.hasNext()) {
+                Hardware hardware = iterator.next();
+                if (hardware.getDescription().contains(brand)) {
+                    result.append(hardware.getDescription()).append("\n");
+                }
+            }
+        }
+        return result.toString();
+    }
+
+    public Hardware getHardwareByName(String name) {
+        for (HardwareStock stock : hardwareStocks.values()) {
+            Iterator<Hardware> iterator = stock.createIterator();
+            while (iterator.hasNext()) {
+                Hardware hardware = iterator.next();
+                if (hardware.getDescription().contains(name)) {
+                    return hardware;
+                }
+            }
+        }
+        return null;
     }
 }

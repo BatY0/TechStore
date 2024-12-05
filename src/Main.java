@@ -1,10 +1,10 @@
 
-import AbstractFactoryPattern.Components.FormFactor;
-import CompositePattern.Hardware;
+import AbstractFactory.Components.FormFactor;
+import CompositeAndIterator.Hardware;
 import Singleton.InventoryManager;
-import AbstractFactoryPattern.Factories.ASUSManufacturer;
-import AbstractFactoryPattern.Factories.Company;
-import ObserverPattern.TechStores;
+import AbstractFactory.Factories.ASUSManufacturer;
+import AbstractFactory.Factories.Company;
+import Observer.TechStores;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,6 +31,8 @@ public class Main {
         // Add hardware to the inventory
         inventoryManager.addHardware("GPU", asusGpu, 10);
         inventoryManager.addHardware("Case", asusCase, 5);
+        inventoryManager.removeHardware("GPU", asusGpu, 2);
+
 
         // Print inventory description and price for each stock type
         System.out.println(inventoryManager.getInventoryDescription("GPU"));
