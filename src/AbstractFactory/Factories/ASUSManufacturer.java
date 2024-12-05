@@ -1,13 +1,12 @@
 package AbstractFactory.Factories;
 
-import AbstractFactory.AsusProducts.ASUSGpu;
-import AbstractFactory.AsusProducts.AsusCase;
+import AbstractFactory.AsusProducts.*;
 import AbstractFactory.Components.*;
 
 public class ASUSManufacturer implements Company {
     @Override
     public Gpu createGpu(String model, int memorySize, double clockSpeed, double price) {
-        return new ASUSGpu(model, price, memorySize, clockSpeed);
+        return new AsusGpu(model, price, memorySize, clockSpeed);
     }
 
     @Override
@@ -26,9 +25,23 @@ public class ASUSManufacturer implements Company {
     }
 
     @Override
-    public CpuCooler createCpuCooler(String model, CpuCooler.CoolingType coolingType, int fanSpeed, double noiseLevel, double coolingCapacity, String size, double price) {
-       throw new UnsupportedOperationException("ASUS does not manufacture cpu cooler.");
+    public CpuCooler createCpuCooler(String name, double price, CoolingType coolingType, int fanSpeed, double noiseLevel, String size) {
+       return new AsusCpuCooler(name, price, coolingType, fanSpeed, noiseLevel, size);
     }
 
+    @Override
+    public Motherboard createMotherboard(String name, double price, SocketType socket, MemoryType memoryType, int memorySlots, FormFactor formFactor) {
+        return new AsusMotherboard(name, price, socket, memoryType, memorySlots,formFactor);
+    }
+
+    @Override
+    public PowerSupply createPowerSupply(String model, double price, int wattage, boolean modular) {
+        return new AsusPowerSupply(model, price, wattage, modular);
+    }
+
+    @Override
+    public Storage createStorage(String model, int capacity, int speed, StorageType type, double price) {
+        throw new UnsupportedOperationException("ASUS does not manufacture storage.");
+    }
 
 }

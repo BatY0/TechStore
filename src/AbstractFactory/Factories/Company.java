@@ -18,5 +18,18 @@ public interface Company {
     Case createCase(String model, FormFactor formFactor, int fanCount, double price);
 
     // Method to create a CPU Cooler
-    CpuCooler createCpuCooler(String model, CpuCooler.CoolingType coolingType, int fanSpeed, double noiseLevel, double coolingCapacity, String size, double price);
+    CpuCooler createCpuCooler(String name, double price, CoolingType coolingType, int fanSpeed, double noiseLevel, String size);
+
+    // Method to create a Motherboard
+    Motherboard createMotherboard(String name, double price, SocketType socket, MemoryType memoryType, int memorySlots, FormFactor formFactor);
+
+    // Method to create a Power Supply
+    PowerSupply createPowerSupply(String model, double price, int wattage, boolean modular);
+
+    // Method to create a Storage
+    Storage createStorage(String model, int capacity, int speed, StorageType type, double price);
+
+
+
+
 }

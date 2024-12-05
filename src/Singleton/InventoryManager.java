@@ -1,6 +1,8 @@
 package Singleton;
 
+import AbstractFactory.Factories.ASUSManufacturer;
 import AbstractFactory.Factories.Company;
+import AbstractFactory.Factories.IntelManufacturer;
 import CompositeAndIterator.Hardware;
 import CompositeAndIterator.HardwareStock;
 import Observer.Observer;
@@ -18,6 +20,7 @@ public class InventoryManager {
         hardwareStocks = new HashMap<>();
         factories = new HashMap<>();
         initializeHardwareStocks();
+        initializeFactories();
     }
 
     public static synchronized InventoryManager getInstance() {
@@ -25,6 +28,12 @@ public class InventoryManager {
             instance = new InventoryManager();
         }
         return instance;
+    }
+
+    private void initializeFactories() {
+        addFactory("ASUS", new ASUSManufacturer());
+        addFactory("MSI", new ASUSManufacturer());
+        addFactory("Intel", new IntelManufacturer());
     }
 
     private void initializeHardwareStocks() {
@@ -45,6 +54,9 @@ public class InventoryManager {
 
     public Company getFactory(String name) {
         return factories.get(name);
+    }
+    public String[] getFactoryNames() {
+        return factories.keySet().toArray(new String[0]);
     }
 
     public void addHardware(String stockType, Hardware hardware, int count) {

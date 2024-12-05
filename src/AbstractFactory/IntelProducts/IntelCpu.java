@@ -1,5 +1,8 @@
-package AbstractFactory.Components;
+package AbstractFactory.IntelProducts;
 
+
+import AbstractFactory.Components.Cpu;
+import AbstractFactory.Components.SocketType;
 
 public class IntelCpu extends Cpu {
 

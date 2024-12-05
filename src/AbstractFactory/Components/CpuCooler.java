@@ -4,11 +4,6 @@ import AbstractFactory.Product;
 
 public abstract class CpuCooler extends Product {
 
-    public enum CoolingType {
-        Liquid,
-        Air
-    }
-
     private CoolingType coolingType;
     private int fanSpeed;
     private double noiseLevel;
