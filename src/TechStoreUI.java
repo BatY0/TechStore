@@ -1,12 +1,14 @@
 import AbstractFactory.Components.*;
-import AbstractFactory.Factories.ASUSManufacturer;
+import CompositeAndIterator.HardwareStock;
 import Singleton.InventoryManager;
 import CompositeAndIterator.Hardware;
 import AbstractFactory.Factories.Company;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 public class TechStoreUI extends JFrame {
     private InventoryManager inventoryManager;
@@ -25,23 +27,137 @@ public class TechStoreUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Create the tabbed pane
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Add GPU", createAddComponentPanel("GPU"));
-        tabbedPane.addTab("Add Case", createAddComponentPanel("Case"));
-        tabbedPane.addTab("Add CPU", createAddComponentPanel("CPU"));
-        tabbedPane.addTab("Add Memory", createAddComponentPanel("Memory"));
-        tabbedPane.addTab("Add CPU Cooler", createAddComponentPanel("CpuCooler"));
-        tabbedPane.addTab("Add Motherboard", createAddComponentPanel("Motherboard"));
-        tabbedPane.addTab("Add Power Supply", createAddComponentPanel("PowerSupply"));
-        tabbedPane.addTab("Add Storage", createAddComponentPanel("Storage"));
+        tabbedPane.addTab("Add Product", createAddProductTab());
+        tabbedPane.addTab("View Inventory", createListProductsPanel()); // New tab for viewing inventory
 
         add(tabbedPane, BorderLayout.CENTER);
 
+        // System log area
         displayArea = new JTextArea();
         displayArea.setEditable(false);
         displayArea.setBorder(BorderFactory.createTitledBorder("System Log"));
         add(new JScrollPane(displayArea), BorderLayout.SOUTH);
     }
+
+    private JPanel createAddProductTab() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        // Panel for component selection buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 6, 5, 5));
+        JButton gpuButton = new JButton("Add GPU");
+        JButton cpuButton = new JButton("Add CPU");
+        JButton memoryButton = new JButton("Add Memory");
+        JButton caseButton = new JButton("Add Case");
+        JButton coolerButton = new JButton("Add CPU Cooler");
+        JButton storageButton = new JButton("Add Storage");
+        JButton motherboardButton = new JButton("Add Motherboard");
+        JButton powerSupplyButton = new JButton("Add Power Supply");
+
+
+        buttonPanel.add(gpuButton);
+        buttonPanel.add(cpuButton);
+        buttonPanel.add(memoryButton);
+        buttonPanel.add(caseButton);
+        buttonPanel.add(coolerButton);
+        buttonPanel.add(storageButton);
+        buttonPanel.add(motherboardButton);
+        buttonPanel.add(powerSupplyButton);
+
+        mainPanel.add(buttonPanel, BorderLayout.NORTH);
+
+        // Panel for displaying forms dynamically
+        JPanel formPanel = new JPanel(new CardLayout());
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+
+        // Create forms for each component type
+        formPanel.add(createAddComponentPanel("GPU"), "GPU");
+        formPanel.add(createAddComponentPanel("CPU"), "CPU");
+        formPanel.add(createAddComponentPanel("Memory"), "Memory");
+        formPanel.add(createAddComponentPanel("Case"), "Case");
+        formPanel.add(createAddComponentPanel("CpuCooler"), "CpuCooler");
+        formPanel.add(createAddComponentPanel("Storage"), "Storage");
+        formPanel.add(createAddComponentPanel("Motherboard"), "Motherboard");
+        formPanel.add(createAddComponentPanel("PowerSupply"), "PowerSupply");
+
+        // Action listeners for buttons
+        CardLayout cardLayout = (CardLayout) formPanel.getLayout();
+        gpuButton.addActionListener(e -> cardLayout.show(formPanel, "GPU"));
+        cpuButton.addActionListener(e -> cardLayout.show(formPanel, "CPU"));
+        memoryButton.addActionListener(e -> cardLayout.show(formPanel, "Memory"));
+        caseButton.addActionListener(e -> cardLayout.show(formPanel, "Case"));
+        coolerButton.addActionListener(e -> cardLayout.show(formPanel, "CpuCooler"));
+        storageButton.addActionListener(e -> cardLayout.show(formPanel, "Storage"));
+        motherboardButton.addActionListener(e -> cardLayout.show(formPanel, "Motherboard"));
+        powerSupplyButton.addActionListener(e -> cardLayout.show(formPanel, "PowerSupply"));
+
+        return mainPanel;
+    }
+
+    private JPanel createListProductsPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Dropdown for stock type
+        JComboBox<String> stockTypeComboBox = new JComboBox<>();
+        stockTypeComboBox.addItem("All");
+        InventoryManager.getInstance().getHardwareStocks().keySet().forEach(stockTypeComboBox::addItem);
+
+        // Table for displaying hardware
+        String[] columnNames = { "Type", "Description", "Quantity", "Unit Price", "Total Price" };
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        JTable productTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(productTable);
+
+        panel.add(stockTypeComboBox, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        // Update table when stock type changes
+        stockTypeComboBox.addActionListener(e -> {
+            String selectedType = (String) stockTypeComboBox.getSelectedItem();
+            updateProductTable(tableModel, "All".equals(selectedType) ? null : selectedType);
+        });
+
+        // Populate table initially with all products
+        updateProductTable(tableModel, null);
+
+        return panel;
+    }
+
+
+    private void updateProductTable(DefaultTableModel tableModel, String stockType) {
+        tableModel.setRowCount(0); // Clear the table
+
+        InventoryManager inventoryManager = InventoryManager.getInstance();
+
+        if (stockType == null) { // Display all hardware
+            for (HardwareStock stock : inventoryManager.getHardwareStocks().values()) {
+                populateTableWithStockData(tableModel, stock);
+            }
+        } else { // Display hardware for a specific stock type
+            HardwareStock stock = inventoryManager.getHardwareStock(stockType);
+            if (stock != null) {
+                populateTableWithStockData(tableModel, stock);
+            }
+        }
+    }
+
+    private void populateTableWithStockData(DefaultTableModel tableModel, HardwareStock stock) {
+        Iterator<Hardware> iterator = stock.createIterator();
+        while (iterator.hasNext()) {
+            Hardware hardware = iterator.next();
+            int quantity = stock.getQuantity(hardware); // Get the quantity of the hardware
+            tableModel.addRow(new Object[] {
+                    stock.getDescription(),       // Stock type
+                    hardware.getDescription(), // Hardware description
+                    quantity,                  // Quantity in stock
+                    hardware.getPrice(),       // Price per unit
+                    quantity * hardware.getPrice() // Total price
+            });
+        }
+    }
+
 
     private JPanel createAddComponentPanel(String componentType) {
         JPanel panel = new JPanel();
@@ -73,7 +189,7 @@ public class TechStoreUI extends JFrame {
                 });
             }
             case "CPU" -> {
-                JTextField socketField = new JTextField();
+                JComboBox<SocketType> socketField = new JComboBox<>(SocketType.values());
                 JTextField coresField = new JTextField();
                 JTextField threadsField = new JTextField();
                 JTextField clockSpeedField = new JTextField();
@@ -178,16 +294,15 @@ public class TechStoreUI extends JFrame {
             }
             case "Storage" -> {
                 JTextField capacityField = new JTextField();
-                JTextField speedField = new JTextField();
+
                 JComboBox<StorageType> storageTypeComboBox = new JComboBox<>(StorageType.values());
                 addLabeledField(panel, "Capacity (GB):", capacityField);
-                addLabeledField(panel, "Speed (MB/s):", speedField);
                 addLabeledField(panel, "Storage Type:", storageTypeComboBox);
                 addLabeledField(panel, "Price:", priceField);
                 addLabeledField(panel, "Quantity:", quantityField);
                 addSubmitButton(panel, "Add Storage", e -> {
                     try {
-                        addStorage(factoryComboBox, productNameField, capacityField, speedField, storageTypeComboBox, priceField, quantityField);
+                        addStorage(factoryComboBox, productNameField, capacityField, storageTypeComboBox, priceField, quantityField);
                     } catch (Exception ex) {
                         displayArea.setText("Error: " + ex.getMessage());
                     }
@@ -234,12 +349,12 @@ public class TechStoreUI extends JFrame {
         displayArea.setText("GPU added successfully.");
     }
 
-    private void addCpu(JComboBox<String> factoryComboBox, JTextField productNameField, JTextField socketField,
+    private void addCpu(JComboBox<String> factoryComboBox, JTextField productNameField, JComboBox<SocketType> socketField,
                         JTextField coresField, JTextField threadsField, JTextField clockSpeedField,
                         JTextField priceField, JTextField quantityField) {
         Company factory = getSelectedFactory(factoryComboBox);
         String productName = productNameField.getText();
-        String socket = socketField.getText();
+        String socket = (String) socketField.getSelectedItem();
         int cores = Integer.parseInt(coresField.getText());
         int threads = Integer.parseInt(threadsField.getText());
         double clockSpeed = Double.parseDouble(clockSpeedField.getText());
@@ -334,18 +449,17 @@ public class TechStoreUI extends JFrame {
     }
 
     private void addStorage(JComboBox<String> factoryComboBox, JTextField productNameField,
-                            JTextField capacityField, JTextField speedField,
+                            JTextField capacityField,
                             JComboBox<StorageType> storageTypeComboBox,
                             JTextField priceField, JTextField quantityField) {
         Company factory = getSelectedFactory(factoryComboBox);
         String productName = productNameField.getText();
         int capacity = Integer.parseInt(capacityField.getText());
-        int speed = Integer.parseInt(speedField.getText());
         StorageType type = (StorageType) storageTypeComboBox.getSelectedItem();
         double price = Double.parseDouble(priceField.getText());
         int quantity = Integer.parseInt(quantityField.getText());
 
-        Hardware storage = factory.createStorage(productName, capacity, speed, type, price);
+        Hardware storage = factory.createStorage(productName, capacity, type, price);
         inventoryManager.addHardware("Storage", storage, quantity);
         displayArea.setText("Storage added successfully.");
     }

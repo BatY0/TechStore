@@ -2,19 +2,18 @@ package Singleton;
 
 import AbstractFactory.Factories.ASUSManufacturer;
 import AbstractFactory.Factories.Company;
+import AbstractFactory.Factories.CorsairManufacturer;
 import AbstractFactory.Factories.IntelManufacturer;
 import CompositeAndIterator.Hardware;
 import CompositeAndIterator.HardwareStock;
 import Observer.Observer;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class InventoryManager {
     private static InventoryManager instance;
-    private Map<String, HardwareStock> hardwareStocks;
-    private Map<String, Company> factories;
+    private final Map<String, HardwareStock> hardwareStocks;
+    private final Map<String, Company> factories;
 
     private InventoryManager() {
         hardwareStocks = new HashMap<>();
@@ -34,18 +33,18 @@ public class InventoryManager {
         addFactory("ASUS", new ASUSManufacturer());
         addFactory("MSI", new ASUSManufacturer());
         addFactory("Intel", new IntelManufacturer());
+        addFactory("Corsair", new CorsairManufacturer());
     }
 
     private void initializeHardwareStocks() {
         hardwareStocks.put("GPU", new HardwareStock("GPU"));
         hardwareStocks.put("Storage", new HardwareStock("Storage"));
         hardwareStocks.put("CPU", new HardwareStock("CPU"));
-        hardwareStocks.put("CpuCooler",new HardwareStock("CpuCooler"));
-        hardwareStocks.put("PowerSupply",new HardwareStock("PowerSupply"));
-        hardwareStocks.put("Motherboard",new HardwareStock("Motherboard"));
-        hardwareStocks.put("Memory",new HardwareStock("Memory"));
-        hardwareStocks.put("Case",new HardwareStock("Case"));
-
+        hardwareStocks.put("CpuCooler", new HardwareStock("CpuCooler"));
+        hardwareStocks.put("PowerSupply", new HardwareStock("PowerSupply"));
+        hardwareStocks.put("Motherboard", new HardwareStock("Motherboard"));
+        hardwareStocks.put("Memory", new HardwareStock("Memory"));
+        hardwareStocks.put("Case", new HardwareStock("Case"));
     }
 
     public void addFactory(String name, Company factory) {
@@ -55,6 +54,7 @@ public class InventoryManager {
     public Company getFactory(String name) {
         return factories.get(name);
     }
+
     public String[] getFactoryNames() {
         return factories.keySet().toArray(new String[0]);
     }
@@ -78,58 +78,29 @@ public class InventoryManager {
     }
 
     public void registerObserver(Observer observer) {
-        for (HardwareStock stock : hardwareStocks.values()) {
-            stock.registerObserver(observer);
-        }
+        hardwareStocks.values().forEach(stock -> stock.registerObserver(observer));
     }
 
     public void removeObserver(Observer observer) {
-        for (HardwareStock stock : hardwareStocks.values()) {
-            stock.removeObserver(observer);
-        }
+        hardwareStocks.values().forEach(stock -> stock.removeObserver(observer));
     }
 
-    public String getInventoryDescription(String stockType) {
-        HardwareStock stock = hardwareStocks.get(stockType);
-        if (stock != null) {
-            return stock.getDescription();
-        } else {
-            return "Invalid stock type: " + stockType;
-        }
+    public Map<String, HardwareStock> getHardwareStocks() {
+        return Collections.unmodifiableMap(hardwareStocks);
     }
 
-    public double getInventoryPrice(String stockType) {
-        HardwareStock stock = hardwareStocks.get(stockType);
-        if (stock != null) {
-            return stock.getPrice();
-        } else {
-            return 0.0;
-        }
+    public HardwareStock getHardwareStock(String stockType) {
+        return hardwareStocks.getOrDefault(stockType, null);
     }
-    public String getHardwareByBrand(String brand) {
-        StringBuilder result = new StringBuilder();
+
+    public List<Hardware> getAllHardware() {
+        List<Hardware> allHardware = new ArrayList<>();
         for (HardwareStock stock : hardwareStocks.values()) {
             Iterator<Hardware> iterator = stock.createIterator();
             while (iterator.hasNext()) {
-                Hardware hardware = iterator.next();
-                if (hardware.getDescription().contains(brand)) {
-                    result.append(hardware.getDescription()).append("\n");
-                }
+                allHardware.add(iterator.next());
             }
         }
-        return result.toString();
-    }
-
-    public Hardware getHardwareByName(String name) {
-        for (HardwareStock stock : hardwareStocks.values()) {
-            Iterator<Hardware> iterator = stock.createIterator();
-            while (iterator.hasNext()) {
-                Hardware hardware = iterator.next();
-                if (hardware.getDescription().contains(name)) {
-                    return hardware;
-                }
-            }
-        }
-        return null;
+        return allHardware;
     }
 }

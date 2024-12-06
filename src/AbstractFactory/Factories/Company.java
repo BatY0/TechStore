@@ -27,7 +27,7 @@ public interface Company {
     PowerSupply createPowerSupply(String model, double price, int wattage, boolean modular);
 
     // Method to create a Storage
-    Storage createStorage(String model, int capacity, int speed, StorageType type, double price);
+    Storage createStorage(String model, int capacity, StorageType type, double price);
 
 
 

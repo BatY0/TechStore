@@ -1,48 +1,46 @@
 package AbstractFactory.Factories;
 
 import AbstractFactory.Components.*;
-import AbstractFactory.IntelProducts.IntelCpu;
-import AbstractFactory.IntelProducts.IntelGpu;
+import AbstractFactory.CorsairProducts.*;
 
-public class IntelManufacturer implements Company{
-
+public class CorsairManufacturer implements Company {
     @Override
     public Gpu createGpu(String model, int memorySize, double clockSpeed, double price) {
-        return new IntelGpu(model,memorySize,clockSpeed,price);
+        throw new UnsupportedOperationException("Corsair does not manufacture GPUs.");
     }
 
     @Override
     public Cpu createCpu(String model, String socket, int cores, int threads, double clockSpeed, double price) {
-        return new IntelCpu(model, SocketType.valueOf(socket), cores, threads, clockSpeed, price);
+        throw new UnsupportedOperationException("Corsair does not manufacture CPUs.");
     }
 
     @Override
     public Memory createMemory(String model, int capacity, int speed, MemoryType type, double price) {
-        throw new UnsupportedOperationException("Intel does not manufacture memory.");
+        return new CorsairMemory(model, price, capacity, speed, type);
     }
 
     @Override
     public Case createCase(String model, FormFactor formFactor, int fanCount, double price) {
-        throw new UnsupportedOperationException("Intel does not manufacture cases.");
+        return new CorsairCase(model, formFactor, fanCount, price);
     }
 
     @Override
     public CpuCooler createCpuCooler(String name, double price, CoolingType coolingType, int fanSpeed, double noiseLevel, String size) {
-        throw new UnsupportedOperationException("Intel does not manufacture CPU coolers.");
+        return new CorsairCooler(name, price, coolingType, fanSpeed, noiseLevel, size);
     }
 
     @Override
     public Motherboard createMotherboard(String name, double price, SocketType socket, MemoryType memoryType, int memorySlots, FormFactor formFactor) {
-        throw new UnsupportedOperationException("Intel does not manufacture motherboards.");
+        throw new UnsupportedOperationException("Corsair does not manufacture motherboards.");
     }
 
     @Override
-    public PowerSupply createPowerSupply(String model, double price, int wattage, boolean modular) {
-        throw new UnsupportedOperationException("Intel does not manufacture power supplies.");
+    public PowerSupply createPowerSupply(String name, double price, int wattage, boolean modular) {
+        return new CorsairPowerSupply(name, price, wattage, modular);
     }
 
     @Override
     public Storage createStorage(String model, int capacity, StorageType type, double price) {
-        throw new UnsupportedOperationException("Intel does not manufacture storage.");
+        return new CorsairStorage(model, price, capacity,type);
     }
 }

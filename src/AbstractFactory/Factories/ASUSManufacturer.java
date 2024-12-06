@@ -40,7 +40,7 @@ public class ASUSManufacturer implements Company {
     }
 
     @Override
-    public Storage createStorage(String model, int capacity, int speed, StorageType type, double price) {
+    public Storage createStorage(String model, int capacity, StorageType type, double price) {
         throw new UnsupportedOperationException("ASUS does not manufacture storage.");
     }
 

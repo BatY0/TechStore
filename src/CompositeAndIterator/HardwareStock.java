@@ -16,17 +16,7 @@ public class HardwareStock implements Hardware, Subject {
 
     @Override
     public String getDescription() {
-        StringBuilder description = new StringBuilder(name + " Hardware Stock:\n");
-        Iterator<Hardware> iterator = createIterator();
-        while (iterator.hasNext()) {
-            Hardware hardware = iterator.next();
-            int quantity = hardwares.get(hardware);
-            description.append(hardware.getDescription())
-                    .append(" (Quantity: ")
-                    .append(quantity)
-                    .append(")\n");
-        }
-        return description.toString();
+        return name;
     }
 
     @Override
@@ -103,5 +93,9 @@ public class HardwareStock implements Hardware, Subject {
     @Override
     public Iterator<Hardware> createIterator() {
         return new CompositeIterator(hardwares.keySet().iterator());
+    }
+
+    public int getQuantity(Hardware hardware) {
+        return hardwares.getOrDefault(hardware, 0);
     }
 }
