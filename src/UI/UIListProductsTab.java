@@ -11,12 +11,12 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
-public class UIListProducts {
+public class UIListProductsTab {
 
     private JTextArea displayArea;
     private DefaultTableModel tableModel;
 
-    public UIListProducts( JTextArea displayArea) {
+    public UIListProductsTab(JTextArea displayArea) {
         this.displayArea = displayArea;
     }
 
@@ -45,44 +45,78 @@ public class UIListProducts {
             int row = e.getFirstRow();
             int column = e.getColumn();
 
-            if (column == 2 || column == 3) { // Quantity or Unit Price
+            // Check if the column changed is either Quantity or Unit Price
+            if (column == 2 || column == 3) { // Quantity (column 2) or Unit Price (column 3)
                 try {
                     String stockType = (String) productTable.getValueAt(row, 0);
                     String description = (String) productTable.getValueAt(row, 1);
-                    int newQuantity = Integer.parseInt(productTable.getValueAt(row, 2).toString());
-                    double newUnitPrice = Double.parseDouble(productTable.getValueAt(row, 3).toString());
 
-                    // Confirmation Dialog before updating the values
-                    int response = JOptionPane.showConfirmDialog(
-                            panel,
-                            "Are you sure you want to update the following?\n" +
-                                    "Hardware: " + description + "\n" +
-                                    "Quantity: " + newQuantity + "\n" +
-                                    "Unit Price: " + newUnitPrice,
-                            "Confirm Update",
-                            JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.QUESTION_MESSAGE
-                    );
+                    // Get the new values
+                    int newQuantity = Integer.parseInt(productTable.getValueAt(row, 2).toString().replace(",", ""));
+                    double newUnitPrice = Double.parseDouble(productTable.getValueAt(row, 3).toString().replace(",", ""));
 
-                    if (response == JOptionPane.OK_OPTION) {
-                        // Update inventory only after user confirms
-                        HardwareStock stock = InventoryManager.getInstance().getHardwareStock(stockType);
-                        var hardware = stock.findHardwareByDescription(description);
+                    // Handle Quantity change
+                    if (column == 2) { // Quantity column was modified
+                        // Confirmation Dialog before updating the quantity
+                        int response = JOptionPane.showConfirmDialog(
+                                panel,
+                                "Are you sure you want to update the following?\n" +
+                                        "Hardware: " + description + "\n" +
+                                        "Quantity: " + newQuantity,
+                                "Confirm Quantity Update",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE
+                        );
 
-                        if (hardware != null) {
-                            // Update values in the inventory after confirmation
-                            stock.setQuantity(hardware, newQuantity);
-                            hardware.setPrice(newUnitPrice);
+                        if (response == JOptionPane.OK_OPTION) {
+                            HardwareStock stock = InventoryManager.getInstance().getHardwareStock(stockType);
+                            var hardware = stock.findHardwareByDescription(description);
+                            if (hardware != null) {
+                                // Update quantity in the inventory
+                                InventoryManager.getInstance().setQuantity(stockType, hardware, newQuantity);
 
-                            // Log the update
-                            displayArea.append("Updated " + description + " in " + stockType + "\n");
+                                // Log the update
+                                displayArea.append("Updated Quantity for " + description + " in " + stockType + "\n");
 
-                            // Reload table to reflect updated data
+                                // Reload table to reflect updated data
+                                updateProductTable((DefaultTableModel) productTable.getModel(), stockType);
+                            }
+                        } else {
+                            // Reload table to discard changes (in case user clicked Cancel)
                             updateProductTable((DefaultTableModel) productTable.getModel(), stockType);
                         }
-                    } else {
-                        // Reload table to discard changes (in case user clicked Cancel)
-                        updateProductTable((DefaultTableModel) productTable.getModel(), stockType);
+                    }
+
+                    // Handle Unit Price change
+                    else if (column == 3) { // Unit Price column was modified
+                        // Confirmation Dialog before updating the unit price
+                        int response = JOptionPane.showConfirmDialog(
+                                panel,
+                                "Are you sure you want to update the following?\n" +
+                                        "Hardware: " + description + "\n" +
+                                        "Unit Price: " + newUnitPrice,
+                                "Confirm Unit Price Update",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE
+                        );
+
+                        if (response == JOptionPane.OK_OPTION) {
+                            HardwareStock stock = InventoryManager.getInstance().getHardwareStock(stockType);
+                            var hardware = stock.findHardwareByDescription(description);
+                            if (hardware != null) {
+                                // Update unit price in the inventory
+                                InventoryManager.getInstance().setPrice(stockType, hardware, newUnitPrice);
+
+                                // Log the update
+                                displayArea.append("Updated Unit Price for " + description + " in " + stockType + "\n");
+
+                                // Reload table to reflect updated data
+                                updateProductTable((DefaultTableModel) productTable.getModel(), stockType);
+                            }
+                        } else {
+                            // Reload table to discard changes (in case user clicked Cancel)
+                            updateProductTable((DefaultTableModel) productTable.getModel(), stockType);
+                        }
                     }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(panel, "Invalid input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -90,6 +124,7 @@ public class UIListProducts {
                 }
             }
         });
+
 
         JScrollPane scrollPane = new JScrollPane(productTable);
 

@@ -1,4 +1,4 @@
-package Observer;
+package ObserverPattern;
 
 public interface Subject {
     void registerObserver(Observer observer);

@@ -259,7 +259,7 @@ public class UIAddProductTab {
 
         Hardware gpu = factory.createGpu(productName, memorySize, clockSpeed, price);
         inventoryManager.addHardware("GPU", gpu, quantity);
-        displayArea.setText("GPU added successfully.");
+        displayArea.setText("GPU added successfully. \n");
     }
 
     private void addCpu(JComboBox<String> factoryComboBox, JTextField productNameField, JComboBox<SocketType> socketField,
@@ -267,7 +267,7 @@ public class UIAddProductTab {
                         JTextField priceField, JTextField quantityField) {
         Company factory = getSelectedFactory(factoryComboBox);
         String productName = productNameField.getText();
-        String socket = (String) socketField.getSelectedItem();
+        SocketType socket = (SocketType) socketField.getSelectedItem();
         int cores = Integer.parseInt(coresField.getText());
         int threads = Integer.parseInt(threadsField.getText());
         double clockSpeed = Double.parseDouble(clockSpeedField.getText());
@@ -276,7 +276,7 @@ public class UIAddProductTab {
 
         Hardware cpu = factory.createCpu(productName, socket, cores, threads, clockSpeed, price);
         inventoryManager.addHardware("CPU", cpu, quantity);
-        displayArea.setText("CPU added successfully.");
+        displayArea.setText("CPU added successfully. \n");
     }
 
     private void addMemory(JComboBox<String> factoryComboBox, JTextField productNameField, JTextField capacityField,
@@ -292,7 +292,7 @@ public class UIAddProductTab {
 
         Hardware memory = factory.createMemory(productName, capacity, speed, type, price);
         inventoryManager.addHardware("Memory", memory, quantity);
-        displayArea.setText("Memory added successfully.");
+        displayArea.setText("Memory added successfully. \n");
     }
 
     private void addCase(JComboBox<String> factoryComboBox, JTextField productNameField,
@@ -307,7 +307,7 @@ public class UIAddProductTab {
 
         Hardware caseHardware = factory.createCase(productName, formFactor, fanCount, price);
         inventoryManager.addHardware("Case", caseHardware, quantity);
-        displayArea.setText("Case added successfully.");
+        displayArea.setText("Case added successfully. \n");
     }
 
     private void addCpuCooler(JComboBox<String> factoryComboBox, JTextField productNameField,
@@ -325,7 +325,7 @@ public class UIAddProductTab {
 
         Hardware cpuCooler = factory.createCpuCooler(productName, price, coolingType, fanSpeed, noiseLevel, size);
         inventoryManager.addHardware("CpuCooler", cpuCooler, quantity);
-        displayArea.setText("CPU Cooler added successfully.");
+        displayArea.setText("CPU Cooler added successfully.\n");
     }
 
     private void addMotherboard(JComboBox<String> factoryComboBox, JTextField productNameField,
@@ -343,7 +343,7 @@ public class UIAddProductTab {
 
         Hardware motherboard = factory.createMotherboard(productName, price, socket, memoryType, memorySlots, formFactor);
         inventoryManager.addHardware("Motherboard", motherboard, quantity);
-        displayArea.setText("Motherboard added successfully.");
+        displayArea.setText("Motherboard added successfully. \n");
     }
 
     private void addPowerSupply(JComboBox<String> factoryComboBox, JTextField productNameField,
@@ -358,7 +358,7 @@ public class UIAddProductTab {
 
         Hardware powerSupply = factory.createPowerSupply(productName, price, wattage, modular);
         inventoryManager.addHardware("PowerSupply", powerSupply, quantity);
-        displayArea.setText("Power Supply added successfully.");
+        displayArea.setText("Power Supply added successfully. \n");
     }
 
     private void addStorage(JComboBox<String> factoryComboBox, JTextField productNameField,
@@ -374,7 +374,7 @@ public class UIAddProductTab {
 
         Hardware storage = factory.createStorage(productName, capacity, type, price);
         inventoryManager.addHardware("Storage", storage, quantity);
-        displayArea.setText("Storage added successfully.");
+        displayArea.setText("Storage added successfully. \n");
     }
 
 
@@ -382,7 +382,7 @@ public class UIAddProductTab {
         String factoryName = (String) factoryComboBox.getSelectedItem();
         Company factory = inventoryManager.getFactory(factoryName);
         if (factory == null) {
-            throw new IllegalArgumentException("Factory not found.");
+            throw new IllegalArgumentException("Factory not found. \n");
         }
         return factory;
     }

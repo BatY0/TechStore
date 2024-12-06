@@ -1,18 +1,18 @@
 package UI;
 
-import CompositeAndIterator.HardwareStock;
 import Singleton.InventoryManager;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class TechStoreUI extends JFrame {
+public class UIMain extends JFrame {
     private InventoryManager inventoryManager;
     private JTextArea displayArea;
     private UIAddProductTab addProductTab;
-    private UIListProducts listProducts;
+    private UIListProductsTab listProducts;
+    private UIStoreNotificationsTab addObserverTab;
 
-    public TechStoreUI() {
+    public UIMain() {
         inventoryManager = InventoryManager.getInstance();
         initializeUI();
     }
@@ -24,7 +24,7 @@ public class TechStoreUI extends JFrame {
         setLayout(new BorderLayout());
 
         // System log area
-        displayArea = new JTextArea();
+        displayArea = new JTextArea(5, 20);
         displayArea.setEditable(false);
         displayArea.setBorder(BorderFactory.createTitledBorder("System Log"));
         add(new JScrollPane(displayArea), BorderLayout.SOUTH);
@@ -37,8 +37,12 @@ public class TechStoreUI extends JFrame {
         tabbedPane.addTab("Add Product", addProductTab.createAddProductTab());
 
         // View Inventory Tab
-        listProducts = new UIListProducts(displayArea);
+        listProducts = new UIListProductsTab(displayArea);
         tabbedPane.addTab("View Inventory", listProducts.createListProductsPanel());
+
+        // Add Observer Tab
+        addObserverTab = new UIStoreNotificationsTab(displayArea);
+        tabbedPane.addTab("Manage Stores", addObserverTab.createStoreNotificationsTab());
 
         tabbedPane.addChangeListener(e -> {
             if (tabbedPane.getSelectedIndex() == 1) {  // Inventory tab (index 1)
@@ -50,6 +54,6 @@ public class TechStoreUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TechStoreUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> new UIMain().setVisible(true));
     }
 }

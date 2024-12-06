@@ -9,7 +9,7 @@ public interface Company {
     Gpu createGpu(String model, int memorySize, double clockSpeed, double price);
 
     // Method to create a CPU
-    Cpu createCpu(String model, String socket, int cores, int threads, double clockSpeed, double price);
+    Cpu createCpu(String model, SocketType socket, int cores, int threads, double clockSpeed, double price);
 
     // Method to create a Memory
     Memory createMemory(String model, int capacity, int speed, MemoryType type, double price);

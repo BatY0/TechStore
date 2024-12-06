@@ -1,14 +1,10 @@
 package CompositeAndIterator;
 
-import Observer.Observer;
-import Observer.Subject;
-
 import java.util.*;
 
-public class HardwareStock implements Hardware, Subject {
+public class HardwareStock implements Hardware {
     private final String name;
     private Map<Hardware, Integer> hardwares = new HashMap<>();
-    private List<Observer> observers = new ArrayList<>();
 
     public HardwareStock(String name) {
         this.name = name;
@@ -39,7 +35,7 @@ public class HardwareStock implements Hardware, Subject {
             return;
         }
         hardwares.put(hardware, hardwares.getOrDefault(hardware, 0) + count);
-        notifyObservers("Added " + count + " of " + hardware.getDescription());
+
     }
 
     @Override
@@ -57,10 +53,10 @@ public class HardwareStock implements Hardware, Subject {
         int currentCount = hardwares.get(hardware);
         if (currentCount <= count) {
             hardwares.remove(hardware);
-            notifyObservers("Removed all of " + hardware.getDescription());
+
         } else {
             hardwares.put(hardware, currentCount - count);
-            notifyObservers("Removed " + count + " of " + hardware.getDescription());
+
         }
     }
 
@@ -69,26 +65,10 @@ public class HardwareStock implements Hardware, Subject {
         throw new UnsupportedOperationException("Not applicable for this implementation.");
     }
 
-    @Override
-    public void registerObserver(Observer observer) {
-        observers.add(observer);
-    }
 
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
 
-    @Override
-    public void notifyObservers() {
-        notifyObservers("");
-    }
 
-    private void notifyObservers(String message) {
-        for (Observer observer : observers) {
-            observer.update(message);
-        }
-    }
+
 
     @Override
     public Iterator<Hardware> createIterator() {
@@ -100,6 +80,7 @@ public class HardwareStock implements Hardware, Subject {
     }
     public void setQuantity(Hardware hardware, int quantity) {
         hardwares.put(hardware, quantity);
+
     }
     public Hardware findHardwareByDescription(String description) {
         Iterator<Hardware> iterator = createIterator();
@@ -118,6 +99,7 @@ public class HardwareStock implements Hardware, Subject {
     @Override
     public void setPrice(double newUnitPrice) {
         throw new UnsupportedOperationException("Not applicable for this implementation.");
+
     }
 
 

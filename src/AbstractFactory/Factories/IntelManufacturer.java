@@ -12,8 +12,8 @@ public class IntelManufacturer implements Company{
     }
 
     @Override
-    public Cpu createCpu(String model, String socket, int cores, int threads, double clockSpeed, double price) {
-        return new IntelCpu(model, SocketType.valueOf(socket), cores, threads, clockSpeed, price);
+    public Cpu createCpu(String model, SocketType socket, int cores, int threads, double clockSpeed, double price) {
+        return new IntelCpu(model, socket, cores, threads, clockSpeed, price);
     }
 
     @Override

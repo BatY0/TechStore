@@ -12,7 +12,7 @@ public class MSIManufacturer implements Company {
     }
 
     @Override
-    public Cpu createCpu(String model, String socket, int cores, int threads, double clockSpeed, double price) {
+    public Cpu createCpu(String model, SocketType socket, int cores, int threads, double clockSpeed, double price) {
         throw new UnsupportedOperationException("MSI does not manufacture CPU");
     }
 

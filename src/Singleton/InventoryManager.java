@@ -1,19 +1,19 @@
 package Singleton;
 
-import AbstractFactory.Factories.ASUSManufacturer;
-import AbstractFactory.Factories.Company;
-import AbstractFactory.Factories.CorsairManufacturer;
-import AbstractFactory.Factories.IntelManufacturer;
+import AbstractFactory.Factories.*;
 import CompositeAndIterator.Hardware;
 import CompositeAndIterator.HardwareStock;
-import Observer.Observer;
+import ObserverPattern.Subject;
+import ObserverPattern.TechStores;
+import ObserverPattern.Observer;
 
 import java.util.*;
 
-public class InventoryManager {
+public class InventoryManager implements Subject {
     private static InventoryManager instance;
     private final Map<String, HardwareStock> hardwareStocks;
     private final Map<String, Company> factories;
+    private final List<Observer> observers = new ArrayList<>();
 
     private InventoryManager() {
         hardwareStocks = new HashMap<>();
@@ -31,7 +31,7 @@ public class InventoryManager {
 
     private void initializeFactories() {
         addFactory("ASUS", new ASUSManufacturer());
-        addFactory("MSI", new ASUSManufacturer());
+        addFactory("MSI", new MSIManufacturer());
         addFactory("Intel", new IntelManufacturer());
         addFactory("Corsair", new CorsairManufacturer());
     }
@@ -63,26 +63,93 @@ public class InventoryManager {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
             stock.add(hardware, count);
+            notifyObservers("Added " + count + " " + hardware.getDescription() + " to " + stockType + " stock");
         } else {
             System.out.println("Invalid stock type: " + stockType);
         }
+    }
+
+    public void setQuantity(String stockType, Hardware hardware, int count) {
+        HardwareStock stock = hardwareStocks.get(stockType);
+        if (stock != null) {
+            stock.setQuantity(hardware, count);
+            notifyObservers("Quantity of " + hardware.getDescription() + " in " + stockType + " stock has been updated to " + count);
+        } else {
+            System.out.println("Invalid stock type: " + stockType);
+        }
+    }
+
+    public void setPrice(String stockType, Hardware hardware, double price) {
+        HardwareStock stock = hardwareStocks.get(stockType);
+        Iterator<Hardware> iterator = stock.createIterator();
+        while (iterator.hasNext()) {
+            Hardware h = iterator.next();
+            if (h.equals(hardware)) {
+                h.setPrice(price);
+                notifyObservers("Price of " + hardware.getDescription() + " in " + stockType + " stock has been updated to " + price);
+                break;
+            }
+        }
+
     }
 
     public void removeHardware(String stockType, Hardware hardware, int count) {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
             stock.remove(hardware, count);
+            notifyObservers("Removed " + count + " " + hardware.getDescription() + " from " + stockType + " stock");
         } else {
             System.out.println("Invalid stock type: " + stockType);
         }
     }
 
+    @Override
     public void registerObserver(Observer observer) {
-        hardwareStocks.values().forEach(stock -> stock.registerObserver(observer));
+        observers.add(observer); // Add observer to the list
     }
 
+    @Override
     public void removeObserver(Observer observer) {
-        hardwareStocks.values().forEach(stock -> stock.removeObserver(observer));
+        observers.remove(observer); // Remove observer from the list
+    }
+
+    @Override
+    public void notifyObservers() {
+        notifyObservers("");
+    }
+
+    public Observer getObserver(String observerName) {
+        for (Observer observer : observers) {
+            if (observer instanceof TechStores) {
+                TechStores store = (TechStores) observer;
+                if (store.getName().equals(observerName)) {
+                    return store;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message); // Notify each observer with the message
+        }
+    }
+
+    public void editObserverName(String oldName, String newName) {
+        for (Observer observer : observers) {
+            if (observer instanceof TechStores) {
+                TechStores store = (TechStores) observer;
+                if (store.getName().equals(oldName)) {
+                    store.setName(newName);
+                    break;
+                }
+            }
+        }
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
     }
 
     public Map<String, HardwareStock> getHardwareStocks() {
@@ -103,4 +170,6 @@ public class InventoryManager {
         }
         return allHardware;
     }
+
+
 }
