@@ -27,6 +27,12 @@ public abstract class Product implements Hardware {
     }
 
     @Override
+    public void setPrice(double price) {
+        this.price = price;
+
+    }
+
+    @Override
     public void add(Hardware hardware,int count) {
         throw new UnsupportedOperationException("Cannot add to a leaf product.");//This for the composite products
     }

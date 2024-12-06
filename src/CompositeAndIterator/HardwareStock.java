@@ -98,4 +98,27 @@ public class HardwareStock implements Hardware, Subject {
     public int getQuantity(Hardware hardware) {
         return hardwares.getOrDefault(hardware, 0);
     }
+    public void setQuantity(Hardware hardware, int quantity) {
+        hardwares.put(hardware, quantity);
+    }
+    public Hardware findHardwareByDescription(String description) {
+        Iterator<Hardware> iterator = createIterator();
+        while (iterator.hasNext()) {
+            Hardware hardware = iterator.next();
+            if (hardware.getDescription().equals(description)) {
+                return hardware;
+            }
+        }
+        return null;
+    }
+
+    public void setHardwarePrice(Hardware hardware, double newUnitPrice) {
+        hardware.setPrice(newUnitPrice);
+    }
+    @Override
+    public void setPrice(double newUnitPrice) {
+        throw new UnsupportedOperationException("Not applicable for this implementation.");
+    }
+
+
 }
