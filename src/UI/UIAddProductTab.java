@@ -240,10 +240,27 @@ public class UIAddProductTab {
         panel.add(Box.createVerticalStrut(5)); // Add spacing between rows
     }
 
+    private void clearForm(JPanel panel) {
+        for (Component component : panel.getComponents()) {
+            if (component instanceof JPanel) {
+                clearForm((JPanel) component); // Recursively clear nested panels
+            } else if (component instanceof JTextField) {
+                ((JTextField) component).setText(""); // Clear text fields
+            } else if (component instanceof JComboBox) {
+                ((JComboBox<?>) component).setSelectedIndex(0); // Reset combo box to first item
+            } else if (component instanceof JCheckBox) {
+                ((JCheckBox) component).setSelected(false); // Uncheck checkboxes
+            }
+        }
+    }
+
     private void addSubmitButton(JPanel panel, String buttonText, ActionListener actionListener) {
         JButton button = new JButton(buttonText);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.addActionListener(actionListener);
+        button.addActionListener(e -> {
+            actionListener.actionPerformed(e); // Perform the original action
+            clearForm(panel); // Clear the form after submission
+        });
         panel.add(Box.createVerticalStrut(10)); // Add spacing before the button
         panel.add(button);
     }

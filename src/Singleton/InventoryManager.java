@@ -96,6 +96,12 @@ public class InventoryManager implements Subject {
     public void removeHardware(String stockType, Hardware hardware, int count) {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
+            //delete the hardware from the stock
+            if (count == -1) {
+                stock.remove(hardware, stock.getQuantity(hardware));
+                notifyObservers("Removed all " + hardware.getDescription() + " from " + stockType + " stock");
+                return;
+            }
             stock.remove(hardware, count);
             notifyObservers("Removed " + count + " " + hardware.getDescription() + " from " + stockType + " stock");
         } else {
