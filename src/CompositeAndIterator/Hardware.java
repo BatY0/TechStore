@@ -10,4 +10,5 @@ public interface Hardware {
     Hardware getChild(int index);
     Iterator<Hardware> createIterator();       // For composite components
     void setPrice(double newUnitPrice);
+    String getBrand();
 }

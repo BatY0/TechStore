@@ -49,6 +49,10 @@ public class UIMain extends JFrame {
         addObserverTab = new UIStoreNotificationsTab(displayArea);
         tabbedPane.addTab("Manage Stores", addObserverTab.createStoreNotificationsTab());
 
+        // Search Tab
+        UISearchTab searchTab = new UISearchTab(displayArea);
+        tabbedPane.addTab("Search", searchTab.createSearchTab());
+
         tabbedPane.addChangeListener(e -> {
             if (tabbedPane.getSelectedIndex() == 1) {  // Inventory tab (index 1)
                 listProducts.updateProductTable();// Refresh the table when switching to inventory tab

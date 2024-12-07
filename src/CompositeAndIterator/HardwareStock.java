@@ -65,6 +65,11 @@ public class HardwareStock implements Hardware {
         throw new UnsupportedOperationException("Not applicable for this implementation.");
     }
 
+    @Override
+    public String getBrand() {
+        throw new UnsupportedOperationException("Not applicable for this implementation.");
+    }
+
 
 
 
