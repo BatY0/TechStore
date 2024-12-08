@@ -1,19 +1,22 @@
 package UI;
 
+import CompositeAndIterator.HardwareStock;
 import Singleton.InventoryManager;
 import CompositeAndIterator.Hardware;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UISearchTab {
 
     private InventoryManager inventoryManager = InventoryManager.getInstance();
     private JTextArea displayArea;
 
-    UISearchTab(JTextArea displayArea) {
+    public UISearchTab(JTextArea displayArea) {
         this.displayArea = displayArea;
     }
 
@@ -48,33 +51,68 @@ public class UISearchTab {
 
         // Action Listener for Search Button
         searchButton.addActionListener(e -> {
-            String searchText = searchField.getText().toLowerCase(); // Case-insensitive
+            String searchText = searchField.getText().trim().toLowerCase(); // Case-insensitive search
             boolean filterByBrand = brandFilterCheckBox.isSelected();
             String selectedFactory = (String) factoryComboBox.getSelectedItem();
 
-            List<Hardware> results = searchProducts(searchText, filterByBrand ? selectedFactory : null);
+            List<HardwareSearchResult> results = searchProducts(searchText, filterByBrand ? selectedFactory : null);
             displaySearchResults(results, resultArea);
         });
 
         return mainPanel;
     }
 
-    private List<Hardware> searchProducts(String name, String brand) {
-        return inventoryManager.getAllHardware().stream()
-                .filter(product -> (name == null || name.isBlank() || product.getDescription().toLowerCase().contains(name))
-                        && (brand == null || product.getBrand().equalsIgnoreCase(brand))) // Compare brand as string
+    private List<HardwareSearchResult> searchProducts(String name, String factory) {
+        Map<String, HardwareStock> hardwareStocks = inventoryManager.getHardwareStocks(); // Get stock type and hardware stock map
+
+        return hardwareStocks.entrySet().stream()
+                .flatMap(entry -> {
+                    HardwareStock hardwareStock = entry.getValue();
+
+                    // Get all matching hardware from the stock
+                    List<Hardware> matchingHardware = hardwareStock.findHardwaresByDescription(name);
+
+                    // Filter the results by factory and map them to search results
+                    return matchingHardware.stream()
+                            .filter(hardware -> factory == null || factory.isEmpty() || hardware.getBrand().equalsIgnoreCase(factory))
+                            .map(hardware -> new HardwareSearchResult(entry.getKey(), hardware));
+                })
                 .collect(Collectors.toList());
     }
 
-    private void displaySearchResults(List<Hardware> results, JTextArea resultArea) {
+
+
+
+    private void displaySearchResults(List<HardwareSearchResult> results, JTextArea resultArea) {
         if (results.isEmpty()) {
             resultArea.setText("No products found matching the criteria.\n");
         } else {
             StringBuilder resultText = new StringBuilder("Search Results:\n\n");
-            for (Hardware hardware : results) {
-                resultText.append(hardware.getDescription()).append("\n");
+            for (HardwareSearchResult result : results) {
+                int quantity = inventoryManager.getHardwareStock(result.getStockType()).getQuantity(result.getHardware());
+                resultText.append(result.getHardware().getDescription())
+                        .append(" - Stock Type: ").append(result.getStockType())
+                        .append(" - Quantity: ").append(quantity).append("\n");
             }
             resultArea.setText(resultText.toString());
         }
+    }
+}
+
+class HardwareSearchResult {
+    private final String stockType;
+    private final Hardware hardware;
+
+    public HardwareSearchResult(String stockType, Hardware hardware) {
+        this.stockType = stockType;
+        this.hardware = hardware;
+    }
+
+    public String getStockType() {
+        return stockType;
+    }
+
+    public Hardware getHardware() {
+        return hardware;
     }
 }

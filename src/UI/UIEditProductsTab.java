@@ -11,11 +11,11 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
-public class UIRemoveProductsTab {
+public class UIEditProductsTab {
     private JTextArea displayArea;
     private DefaultTableModel tableModel;
 
-    public UIRemoveProductsTab(JTextArea displayArea) {
+    public UIEditProductsTab(JTextArea displayArea) {
         this.displayArea = displayArea;
     }
 
@@ -150,7 +150,122 @@ public class UIRemoveProductsTab {
             }
         });
 
-        // Add buttons to panel
+        // Set Quantity Button
+        JButton setQuantityButton = new JButton("Set Quantity");
+        setQuantityButton.addActionListener(e -> {
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                boolean isSelected = (Boolean) tableModel.getValueAt(i, 0);
+                if (isSelected) {
+                    String stockType = (String) tableModel.getValueAt(i, 1);
+                    String description = (String) tableModel.getValueAt(i, 2);
+
+                    HardwareStock stock = InventoryManager.getInstance().getHardwareStock(stockType);
+                    var hardware = stock.findHardwareByDescription(description);
+
+                    if (hardware != null) {
+                        // Show input dialog for the new quantity
+                        String quantityInput = JOptionPane.showInputDialog(
+                                panel,
+                                "Enter the new quantity for " + description + ":",
+                                stock.getQuantity(hardware) // Default to current quantity
+                        );
+
+                        if (quantityInput != null) {
+                            try {
+                                int newQuantity = Integer.parseInt(quantityInput);
+
+                                if (newQuantity < 0) {
+                                    JOptionPane.showMessageDialog(
+                                            panel,
+                                            "Quantity cannot be negative.",
+                                            "Invalid Quantity",
+                                            JOptionPane.ERROR_MESSAGE
+                                    );
+                                    continue;
+                                }
+
+                                // Update the hardware's quantity
+                                InventoryManager.getInstance().setQuantity(stockType, hardware, newQuantity);
+
+                                displayArea.append("Updated quantity for " + description + ": " + newQuantity + "\n");
+
+                            } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(
+                                        panel,
+                                        "Please enter a valid number.",
+                                        "Invalid Input",
+                                        JOptionPane.ERROR_MESSAGE
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Refresh the table
+            String selectedType = (String) stockTypeComboBox.getSelectedItem();
+            updateProductTable(tableModel, "All".equals(selectedType) ? null : selectedType);
+        });
+
+// Set Unit Price Button
+        JButton setPriceButton = new JButton("Set Unit Price");
+        setPriceButton.addActionListener(e -> {
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                boolean isSelected = (Boolean) tableModel.getValueAt(i, 0);
+                if (isSelected) {
+                    String stockType = (String) tableModel.getValueAt(i, 1);
+                    String description = (String) tableModel.getValueAt(i, 2);
+
+                    HardwareStock stock = InventoryManager.getInstance().getHardwareStock(stockType);
+                    var hardware = stock.findHardwareByDescription(description);
+
+                    if (hardware != null) {
+                        // Show input dialog for the new unit price
+                        String priceInput = JOptionPane.showInputDialog(
+                                panel,
+                                "Enter the new unit price for " + description + ":",
+                                hardware.getPrice() // Default to current price
+                        );
+
+                        if (priceInput != null) {
+                            try {
+                                double newPrice = Double.parseDouble(priceInput);
+
+                                if (newPrice < 0) {
+                                    JOptionPane.showMessageDialog(
+                                            panel,
+                                            "Price cannot be negative.",
+                                            "Invalid Price",
+                                            JOptionPane.ERROR_MESSAGE
+                                    );
+                                    continue;
+                                }
+
+                                // Update the hardware's price
+                                InventoryManager.getInstance().setPrice(stockType, hardware, newPrice);
+
+                                displayArea.append("Updated unit price for " + description + ": " + newPrice + "\n");
+
+                            } catch (NumberFormatException ex) {
+                                JOptionPane.showMessageDialog(
+                                        panel,
+                                        "Please enter a valid numeric value.",
+                                        "Invalid Input",
+                                        JOptionPane.ERROR_MESSAGE
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Refresh the table
+            String selectedType = (String) stockTypeComboBox.getSelectedItem();
+            updateProductTable(tableModel, "All".equals(selectedType) ? null : selectedType);
+        });
+
+        buttonPanel.add(setQuantityButton);
+        buttonPanel.add(setPriceButton);
         buttonPanel.add(removeButton);
         buttonPanel.add(deleteButton);
 

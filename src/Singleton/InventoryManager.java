@@ -30,7 +30,7 @@ public class InventoryManager implements Subject {
     }
 
     private void initializeFactories() {
-        addFactory("ASUS", new ASUSManufacturer());
+        addFactory("Asus", new ASUSManufacturer());
         addFactory("MSI", new MSIManufacturer());
         addFactory("Intel", new IntelManufacturer());
         addFactory("Corsair", new CorsairManufacturer());
@@ -63,17 +63,19 @@ public class InventoryManager implements Subject {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
             stock.add(hardware, count);
-            notifyObservers("Added " + count + " " + hardware.getDescription() + " to " + stockType + " stock");
+            notifyObservers("The stock for '" + hardware.getDescription() + "' has been updated. " +
+                    "Added " + count + " units to the '" + stockType + "' inventory. ");
         } else {
             System.out.println("Invalid stock type: " + stockType);
         }
     }
 
+
     public void setQuantity(String stockType, Hardware hardware, int count) {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
             stock.setQuantity(hardware, count);
-            notifyObservers("Quantity of " + hardware.getDescription() + " in " + stockType + " stock has been updated to " + count);
+            notifyObservers("The quantity of '" + hardware.getDescription() + "' in the '" + stockType + "' stock has been updated to " + count + " units.");
         } else {
             System.out.println("Invalid stock type: " + stockType);
         }
@@ -86,7 +88,7 @@ public class InventoryManager implements Subject {
             Hardware h = iterator.next();
             if (h.equals(hardware)) {
                 h.setPrice(price);
-                notifyObservers("Price of " + hardware.getDescription() + " in " + stockType + " stock has been updated to " + price);
+                notifyObservers("The unit price of '" + hardware.getDescription() + "' in the '" + stockType + "' stock has been updated to $" + price + ".");
                 break;
             }
         }
@@ -96,18 +98,21 @@ public class InventoryManager implements Subject {
     public void removeHardware(String stockType, Hardware hardware, int count) {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
-            //delete the hardware from the stock
+            // If count is -1, remove all units
             if (count == -1) {
                 stock.remove(hardware, stock.getQuantity(hardware));
-                notifyObservers("Removed all " + hardware.getDescription() + " from " + stockType + " stock");
+                notifyObservers("The stock for '" + hardware.getDescription() + "' has been updated. " +
+                        "All units have been removed from the '" + stockType + "' inventory. ");
                 return;
             }
             stock.remove(hardware, count);
-            notifyObservers("Removed " + count + " " + hardware.getDescription() + " from " + stockType + " stock");
+            notifyObservers("The stock for '" + hardware.getDescription() + "' has been updated. " +
+                    "Removed " + count + " units from the '" + stockType + "' inventory. ");
         } else {
             System.out.println("Invalid stock type: " + stockType);
         }
     }
+
 
     @Override
     public void registerObserver(Observer observer) {

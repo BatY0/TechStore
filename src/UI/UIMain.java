@@ -8,10 +8,7 @@ import java.awt.*;
 public class UIMain extends JFrame {
     private InventoryManager inventoryManager;
     private JTextArea displayArea;
-    private UIAddProductTab addProductTab;
-    private UIListProductsTab listProducts;
-    private UIStoreNotificationsTab addObserverTab;
-    private UIRemoveProductsTab removeProductsTab;
+
 
     public UIMain() {
         inventoryManager = InventoryManager.getInstance();
@@ -34,30 +31,38 @@ public class UIMain extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // Add Product Tab
-        addProductTab = new UIAddProductTab(displayArea);
+        UIAddProductTab addProductTab = new UIAddProductTab(displayArea);
         tabbedPane.addTab("Add Product", addProductTab.createAddProductTab());
 
         // View Inventory Tab
-        listProducts = new UIListProductsTab(displayArea);
+        UIListProductsTab listProducts = new UIListProductsTab();
         tabbedPane.addTab("View Inventory", listProducts.createListProductsPanel());
 
         // Remove Products Tab
-        removeProductsTab = new UIRemoveProductsTab(displayArea);
-        tabbedPane.addTab("Remove Products", removeProductsTab.createRemoveProductsPanel());
+        UIEditProductsTab editProductsTab = new UIEditProductsTab(displayArea);
+        tabbedPane.addTab("Edit Products", editProductsTab.createRemoveProductsPanel());
 
         // Add Observer Tab
-        addObserverTab = new UIStoreNotificationsTab(displayArea);
+        UIStoreNotificationsTab addObserverTab = new UIStoreNotificationsTab(displayArea);
         tabbedPane.addTab("Manage Stores", addObserverTab.createStoreNotificationsTab());
 
         // Search Tab
         UISearchTab searchTab = new UISearchTab(displayArea);
         tabbedPane.addTab("Search", searchTab.createSearchTab());
 
+        UIAddToCartTab addToCartTab = new UIAddToCartTab(displayArea);
+        tabbedPane.addTab("Add to Cart", addToCartTab.createAddToCartTab());
+
+        UISendCartTab sendCartTab = new UISendCartTab(displayArea, addToCartTab.getCart());
+        tabbedPane.addTab("Send Cart", sendCartTab.createSendCartTab());
+
+
+
         tabbedPane.addChangeListener(e -> {
             if (tabbedPane.getSelectedIndex() == 1) {  // Inventory tab (index 1)
                 listProducts.updateProductTable();// Refresh the table when switching to inventory tab
             } else if (tabbedPane.getSelectedIndex() == 2) {  // Store Notifications tab (index 3)
-                removeProductsTab.updateProductTable(); // Refresh the table when switching to store notifications tab
+                editProductsTab.updateProductTable(); // Refresh the table when switching to store notifications tab
 
             }
         });
@@ -66,6 +71,6 @@ public class UIMain extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new UIMain().setVisible(true));
+
     }
 }

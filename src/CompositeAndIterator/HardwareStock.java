@@ -71,10 +71,6 @@ public class HardwareStock implements Hardware {
     }
 
 
-
-
-
-
     @Override
     public Iterator<Hardware> createIterator() {
         return new CompositeIterator(hardwares.keySet().iterator());
@@ -83,10 +79,12 @@ public class HardwareStock implements Hardware {
     public int getQuantity(Hardware hardware) {
         return hardwares.getOrDefault(hardware, 0);
     }
+
     public void setQuantity(Hardware hardware, int quantity) {
         hardwares.put(hardware, quantity);
 
     }
+
     public Hardware findHardwareByDescription(String description) {
         Iterator<Hardware> iterator = createIterator();
         while (iterator.hasNext()) {
@@ -98,9 +96,30 @@ public class HardwareStock implements Hardware {
         return null;
     }
 
+    public List<Hardware> findHardwaresByDescription(String description) {
+        List<Hardware> matchingHardware = new ArrayList<>();
+
+        if (description == null || description.isBlank()) {
+            return matchingHardware; // Return empty list for null or empty descriptions
+        }
+
+        String lowerCaseDescription = description.toLowerCase(); // Normalize for case-insensitive comparison
+        Iterator<Hardware> iterator = createIterator();
+        while (iterator.hasNext()) {
+            Hardware hardware = iterator.next();
+            if (hardware.getDescription().toLowerCase().contains(lowerCaseDescription)) { // Check if description contains input
+                matchingHardware.add(hardware); // Add matching hardware to the list
+            }
+        }
+        return matchingHardware; // Return the list of matches
+    }
+
+
+
     public void setHardwarePrice(Hardware hardware, double newUnitPrice) {
         hardware.setPrice(newUnitPrice);
     }
+
     @Override
     public void setPrice(double newUnitPrice) {
         throw new UnsupportedOperationException("Not applicable for this implementation.");
