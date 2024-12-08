@@ -9,6 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+
+/**
+ * The UIAddProductTab class is responsible for creating the UI tab for adding products.
+ * It interacts with the InventoryManager to add various hardware components to the inventory.
+ */
+
 public class UIAddProductTab {
 
     private InventoryManager inventoryManager = InventoryManager.getInstance();
@@ -91,7 +97,7 @@ public class UIAddProductTab {
                 JTextField memorySizeField = new JTextField();
                 JTextField clockSpeedField = new JTextField();
                 addLabeledField(panel, "Memory Size (GB):", memorySizeField);
-                addLabeledField(panel, "Clock Speed (GHz):", clockSpeedField);
+                addLabeledField(panel, "Clock Speed (MHz):", clockSpeedField);
                 addLabeledField(panel, "Price:", priceField);
                 addLabeledField(panel, "Quantity:", quantityField);
                 addSubmitButton(panel, "Add GPU", e -> {

@@ -4,6 +4,12 @@ import CompositeAndIterator.Hardware;
 
 import java.util.Iterator;
 
+/**
+ * Product class is the abstract class that implements Hardware interface.
+ * It creates base abstract methods for the products. From this class we can create more specific products.
+ *
+ */
+
 public abstract class Product implements Hardware {
     private String name;
     private double price;
@@ -48,6 +54,8 @@ public abstract class Product implements Hardware {
     }
     public abstract String getBrand();
 
+
+    //Override equals and hashCode methods to compare the products by their names
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -60,6 +68,7 @@ public abstract class Product implements Hardware {
     public int hashCode() {
         return getName().hashCode();
     }
+
 
     @Override
     public Iterator<Hardware> createIterator() {

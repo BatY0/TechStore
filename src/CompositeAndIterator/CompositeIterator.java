@@ -3,6 +3,10 @@ package CompositeAndIterator;
 import java.util.Iterator;
 import java.util.Stack;
 
+/**
+ * This class is an iterator for the composite pattern. It will iterate through all the hardware in the composite pattern.
+ */
+
 public class CompositeIterator implements Iterator<Hardware> { // Implement Iterator<Hardware> here
     private final Stack<Iterator<Hardware>> stack = new Stack<>();
 
@@ -31,7 +35,7 @@ public class CompositeIterator implements Iterator<Hardware> { // Implement Iter
             Iterator<Hardware> iterator = stack.peek();
             Hardware hardware = iterator.next();
             if (hardware instanceof HardwareStock) {
-                stack.push(hardware.createIterator()); // This will work because HardwareStock implements createIterator
+                stack.push(hardware.createIterator());
             }
             return hardware;
         } else {

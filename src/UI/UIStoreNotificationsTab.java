@@ -7,6 +7,10 @@ import Singleton.InventoryManager;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The UIStoreNotificationsTab class provides a user interface tab for managing store notifications.
+ * It allows users to add, edit, and remove stores (observers) from the inventory manager.
+ */
 public class UIStoreNotificationsTab {
     private JTextArea displayArea;
 

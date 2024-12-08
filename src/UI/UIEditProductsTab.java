@@ -11,6 +11,10 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
+/**
+ * The UIAddProductTab class is responsible for creating the UI tab for adding products.
+ * It interacts with the InventoryManager to add various hardware components to the inventory.
+ */
 public class UIEditProductsTab {
     private JTextArea displayArea;
     private DefaultTableModel tableModel;
@@ -33,7 +37,6 @@ public class UIEditProductsTab {
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Only the first column (checkbox) is editable
                 return column == 0;
             }
 
@@ -207,7 +210,7 @@ public class UIEditProductsTab {
             updateProductTable(tableModel, "All".equals(selectedType) ? null : selectedType);
         });
 
-// Set Unit Price Button
+        // Set Unit Price Button
         JButton setPriceButton = new JButton("Set Unit Price");
         setPriceButton.addActionListener(e -> {
             for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -287,7 +290,7 @@ public class UIEditProductsTab {
     }
 
     private void updateProductTable(DefaultTableModel tableModel, String stockType) {
-        tableModel.setRowCount(0); // Clear the table
+        tableModel.setRowCount(0);
 
         InventoryManager inventoryManager = InventoryManager.getInstance();
 

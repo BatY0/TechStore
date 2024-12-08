@@ -9,12 +9,18 @@ import ObserverPattern.Observer;
 
 import java.util.*;
 
+/**
+ * Concrete strategy class for express shipping.
+ * Implements the CargoStrategy interface to provide an express shipping cost calculation based on weight and distance.
+ */
 public class InventoryManager implements Subject {
     private static InventoryManager instance;
     private final Map<String, HardwareStock> hardwareStocks;
     private final Map<String, Company> factories;
     private final List<Observer> observers = new ArrayList<>();
 
+
+    // Private constructor to prevent instantiation
     private InventoryManager() {
         hardwareStocks = new HashMap<>();
         factories = new HashMap<>();
@@ -22,6 +28,7 @@ public class InventoryManager implements Subject {
         initializeFactories();
     }
 
+    // Singleton getInstance method
     public static synchronized InventoryManager getInstance() {
         if (instance == null) {
             instance = new InventoryManager();
@@ -29,6 +36,7 @@ public class InventoryManager implements Subject {
         return instance;
     }
 
+    // Initialize factories and hardware stocks
     private void initializeFactories() {
         addFactory("Asus", new ASUSManufacturer());
         addFactory("MSI", new MSIManufacturer());
@@ -59,6 +67,8 @@ public class InventoryManager implements Subject {
         return factories.keySet().toArray(new String[0]);
     }
 
+
+    // Inventory management methods
     public void addHardware(String stockType, Hardware hardware, int count) {
         HardwareStock stock = hardwareStocks.get(stockType);
         if (stock != null) {
@@ -113,7 +123,7 @@ public class InventoryManager implements Subject {
         }
     }
 
-
+    // Observer pattern methods
     @Override
     public void registerObserver(Observer observer) {
         observers.add(observer); // Add observer to the list
@@ -127,18 +137,6 @@ public class InventoryManager implements Subject {
     @Override
     public void notifyObservers() {
         notifyObservers("");
-    }
-
-    public Observer getObserver(String observerName) {
-        for (Observer observer : observers) {
-            if (observer instanceof TechStores) {
-                TechStores store = (TechStores) observer;
-                if (store.getName().equals(observerName)) {
-                    return store;
-                }
-            }
-        }
-        return null;
     }
 
     private void notifyObservers(String message) {
@@ -163,6 +161,7 @@ public class InventoryManager implements Subject {
         return observers;
     }
 
+    // Getters
     public Map<String, HardwareStock> getHardwareStocks() {
         return Collections.unmodifiableMap(hardwareStocks);
     }

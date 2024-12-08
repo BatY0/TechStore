@@ -2,6 +2,10 @@ package CompositeAndIterator;
 
 import java.util.Iterator;
 
+/**
+ * The Hardware interface represents a component in a composite structure.
+ * It defines methods for managing and accessing hardware components.
+ */
 public interface Hardware {
     String getDescription();
     double getPrice();

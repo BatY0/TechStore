@@ -1,5 +1,9 @@
 package ObserverPattern;
 
+/**
+ * TechStores class that implements Observer interface
+ */
+
 public class TechStores implements Observer {
     private String name;
 

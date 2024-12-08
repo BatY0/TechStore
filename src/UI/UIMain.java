@@ -1,17 +1,17 @@
 package UI;
 
-import Singleton.InventoryManager;
-
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The UIMain class is the main frame for the Tech Store Management System application.
+ * It initializes the user interface and manages the different tabs for various functionalities.
+ */
 public class UIMain extends JFrame {
-    private InventoryManager inventoryManager;
     private JTextArea displayArea;
 
 
     public UIMain() {
-        inventoryManager = InventoryManager.getInstance();
         initializeUI();
     }
 
@@ -47,9 +47,10 @@ public class UIMain extends JFrame {
         tabbedPane.addTab("Manage Stores", addObserverTab.createStoreNotificationsTab());
 
         // Search Tab
-        UISearchTab searchTab = new UISearchTab(displayArea);
+        UISearchTab searchTab = new UISearchTab();
         tabbedPane.addTab("Search", searchTab.createSearchTab());
 
+        // Cart Tab
         UICartManagementTab cartManagementTab = new UICartManagementTab(displayArea);
         tabbedPane.addTab("Cart", cartManagementTab.createCartManagementTab());
 

@@ -4,9 +4,9 @@ import AbstractFactory.Product;
 
 
 public abstract class Memory extends Product {
-    private int capacity;    // Capacity in GB
-    private int speed;       // Speed in MHz
-    private MemoryType type; // Memory type as an enum (DDR4, DDR5)
+    private int capacity;
+    private int speed;
+    private MemoryType type;
 
     public Memory(String model, double price, int capacity, int speed, MemoryType type) {
         super(model, price);

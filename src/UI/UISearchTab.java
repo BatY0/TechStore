@@ -9,15 +9,14 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+/**
+ * The UIMain class is the main frame for the Tech Store Management System application.
+ * It initializes the user interface and manages the different tabs for various functionalities.
+ */
 public class UISearchTab {
 
-    private InventoryManager inventoryManager = InventoryManager.getInstance();
-    private JTextArea displayArea;
-
-    public UISearchTab(JTextArea displayArea) {
-        this.displayArea = displayArea;
+    public UISearchTab() {
     }
 
     protected JPanel createSearchTab() {
@@ -28,7 +27,7 @@ public class UISearchTab {
         searchPanel.setLayout(new GridLayout(3, 2, 10, 10));
 
         JTextField searchField = new JTextField();
-        JComboBox<String> factoryComboBox = new JComboBox<>(inventoryManager.getFactoryNames());
+        JComboBox<String> factoryComboBox = new JComboBox<>(InventoryManager.getInstance().getFactoryNames());
 
         JCheckBox brandFilterCheckBox = new JCheckBox("Filter by Brand");
 
@@ -63,7 +62,7 @@ public class UISearchTab {
     }
 
     private List<HardwareSearchResult> searchProducts(String name, String factory) {
-        Map<String, HardwareStock> hardwareStocks = inventoryManager.getHardwareStocks(); // Get stock type and hardware stock map
+        Map<String, HardwareStock> hardwareStocks = InventoryManager.getInstance().getHardwareStocks(); // Get stock type and hardware stock map
 
         return hardwareStocks.entrySet().stream()
                 .flatMap(entry -> {
@@ -82,14 +81,14 @@ public class UISearchTab {
 
 
 
-
+    // Display search results in the result area
     private void displaySearchResults(List<HardwareSearchResult> results, JTextArea resultArea) {
         if (results.isEmpty()) {
             resultArea.setText("No products found matching the criteria.\n");
         } else {
             StringBuilder resultText = new StringBuilder("Search Results:\n\n");
             for (HardwareSearchResult result : results) {
-                int quantity = inventoryManager.getHardwareStock(result.getStockType()).getQuantity(result.getHardware());
+                int quantity = InventoryManager.getInstance().getHardwareStock(result.getStockType()).getQuantity(result.getHardware());
                 resultText.append(result.getHardware().getDescription())
                         .append(" - Stock Type: ").append(result.getStockType())
                         .append(" - Quantity: ").append(quantity).append("\n");
@@ -99,6 +98,8 @@ public class UISearchTab {
     }
 }
 
+
+//The HardwareSearchResult class represents a search result for a hardware item.
 class HardwareSearchResult {
     private final String stockType;
     private final Hardware hardware;

@@ -11,8 +11,11 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.Locale;
 
+/**
+ * The UIListProductsTab class provides a user interface tab for listing products in the inventory.
+ * It allows users to view the type, description, quantity, unit price, and total price of hardware items.
+ */
 public class UIListProductsTab {
-
 
     private DefaultTableModel tableModel;
 
@@ -54,7 +57,7 @@ public class UIListProductsTab {
     }
 
     private void updateProductTable(DefaultTableModel tableModel, String stockType) {
-        tableModel.setRowCount(0); // Clear the table
+        tableModel.setRowCount(0);
 
         InventoryManager inventoryManager = InventoryManager.getInstance();
 

@@ -12,6 +12,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the cart management tab in the UI.
+ * It allows users to add items to the cart, remove items from the cart, and complete an order.
+ */
+
 public class UICartManagementTab {
 
     private JTextArea displayArea;
@@ -50,7 +55,7 @@ public class UICartManagementTab {
         addProductPanel.add(quantityField);
         addProductPanel.add(addButton);
 
-        // Action Listener for Add Button
+
         addButton.addActionListener(e -> {
             String selectedItem = itemsList.getSelectedValue();
             String quantityText = quantityField.getText();
@@ -58,7 +63,6 @@ public class UICartManagementTab {
             if (selectedItem != null && !quantityText.isBlank()) {
                 try {
                     int quantity = Integer.parseInt(quantityText);
-                    // Get the selected stock type
                     String selectedStockType = (String) stockTypeComboBox.getSelectedItem();
 
                     // Retrieve the hardware item from the inventory based on the selected stock and item description
@@ -69,7 +73,7 @@ public class UICartManagementTab {
                         int availableStock = InventoryManager.getInstance().getHardwareStock(selectedStockType).getQuantity(hardware);
                         if (availableStock >= quantity) {
                             for (int i = 0; i < quantity; i++) {
-                                cart.add(hardware); // Add the hardware item to the cart
+                                cart.add(hardware);
                                 cartListModel.addElement(hardware.getDescription()); // Add item to the cart list view
                             }
 
@@ -102,7 +106,6 @@ public class UICartManagementTab {
         removeButton.addActionListener(e -> {
             String selectedItem = cartList.getSelectedValue();
             if (selectedItem != null) {
-                // Find the hardware item to remove
                 Hardware hardwareToRemove = findHardwareByDescription(selectedItem);
                 if (hardwareToRemove != null) {
                     cart.remove(hardwareToRemove);
@@ -126,7 +129,7 @@ public class UICartManagementTab {
         orderPanel.add(shippingComboBox);
         orderPanel.add(completeOrderButton);
 
-        // Action Listener for Complete Order Button
+
         completeOrderButton.addActionListener(e -> {
             if (!cart.isEmpty()) {
                 CargoStrategy shippingStrategy = getShippingStrategy((String) shippingComboBox.getSelectedItem());
@@ -170,17 +173,15 @@ public class UICartManagementTab {
     }
 
     private void completeOrder(double shippingCost) {
-        // Logic to complete the order (for now, just display a message)
+        // Logic to complete the order we can change this to a more functional approach
         displayArea.setText("Order completed!\n" +
                 "Total items: " + cart.size() + "\n" +
                 "Shipping cost: $" + shippingCost + "\n" +
                 "Your order will be shipped soon. Thank you for your purchase!");
 
-        // Clear the cart after the order is completed
         cart.clear();
         cartListModel.clear();
 
-        // Optionally, update the UI to reflect that the cart is now empty
         displayArea.append("\nThe cart has been cleared.");
     }
 

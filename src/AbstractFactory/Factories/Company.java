@@ -2,7 +2,7 @@ package AbstractFactory.Factories;
 
 import AbstractFactory.Components.*;
 
-//Birden fazla factory var bunların kendine ait ürünleri var sadece onların ürünlerini üretebilirler bunu uida belirtip seçtircem
+
 public interface Company {
 
     // Method to create a GPU

@@ -11,6 +11,7 @@ public class Main {
     public static void main(String[] args) {
         // Add dummy products to the inventory
         addDummyProducts();
+        // Initialize the UI
         SwingUtilities.invokeLater(() -> new UIMain().setVisible(true));
 
 
