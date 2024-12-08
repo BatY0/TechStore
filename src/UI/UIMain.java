@@ -39,8 +39,8 @@ public class UIMain extends JFrame {
         tabbedPane.addTab("View Inventory", listProducts.createListProductsPanel());
 
         // Remove Products Tab
-        UIEditProductsTab editProductsTab = new UIEditProductsTab(displayArea);
-        tabbedPane.addTab("Edit Products", editProductsTab.createRemoveProductsPanel());
+        UIEditProductsTab removeProductsTab = new UIEditProductsTab(displayArea);
+        tabbedPane.addTab("Edit Products", removeProductsTab.createRemoveProductsPanel());
 
         // Add Observer Tab
         UIStoreNotificationsTab addObserverTab = new UIStoreNotificationsTab(displayArea);
@@ -50,11 +50,8 @@ public class UIMain extends JFrame {
         UISearchTab searchTab = new UISearchTab(displayArea);
         tabbedPane.addTab("Search", searchTab.createSearchTab());
 
-        UIAddToCartTab addToCartTab = new UIAddToCartTab(displayArea);
-        tabbedPane.addTab("Add to Cart", addToCartTab.createAddToCartTab());
-
-        UISendCartTab sendCartTab = new UISendCartTab(displayArea, addToCartTab.getCart());
-        tabbedPane.addTab("Send Cart", sendCartTab.createSendCartTab());
+        UICartManagementTab cartManagementTab = new UICartManagementTab(displayArea);
+        tabbedPane.addTab("Cart", cartManagementTab.createCartManagementTab());
 
 
 
@@ -62,7 +59,7 @@ public class UIMain extends JFrame {
             if (tabbedPane.getSelectedIndex() == 1) {  // Inventory tab (index 1)
                 listProducts.updateProductTable();// Refresh the table when switching to inventory tab
             } else if (tabbedPane.getSelectedIndex() == 2) {  // Store Notifications tab (index 3)
-                editProductsTab.updateProductTable(); // Refresh the table when switching to store notifications tab
+                removeProductsTab.updateProductTable(); // Refresh the table when switching to store notifications tab
 
             }
         });
